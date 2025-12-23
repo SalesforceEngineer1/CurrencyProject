@@ -1,0 +1,6 @@
+global class CurrencyScheduler implements Schedulable {
+
+    global void execute(SchedulableContext sc) {
+        CurrencyController.syncCurrenciesInternal();
+    }
+}
