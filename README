@@ -1,0 +1,60 @@
+Currency Management Solution
+
+Overview
+This project deploys a Salesforce Currency Management solution. 
+The solution will combine Salesforce with FreeCurrencyAPI to retrieve and update master currency information.
+
+---
+
+Architecture
+•⁠  ⁠Lightning Web Component (LWC) of manual sync and data view.
+•⁠  ⁠API call out and data processing apex.
+•⁠  ⁠Signed Endpoint credentials in secure API access.
+•⁠  ⁠Apex to be manually synchronized on a daily basis.
+•⁠  ⁠Currency master data object
+•⁠  ⁠Custom Object for currency master data
+
+---
+
+Functional Flow
+1.⁠ ⁠The user clicks on Sync Currencies in LWC.
+2.⁠ ⁠FreeCurrencyAPI is called by Apex as Named Credential.
+3.⁠ ⁠Response has been mapped and converted to Currency__c.
+4.⁠ ⁠UPSERTing of records is by means of external ID.
+5.⁠ ⁠The information is presented in LWC datatable.
+6.⁠ ⁠Apex Data is refreshed on a daily basis.
+
+---
+
+Components
+
+Custom Object
+•⁠  ⁠Currency__c
+  - Currency_Code__c (External ID)
+  - Symbol__c
+  - Native_Symbol__c
+  - Decimal_Digits__c
+  - Rounding__c
+  - Plural_Name__c
+
+Apex Classes
+•⁠  ⁠⁠ CurrencyApiService ⁠ - API callout/parsing.
+•⁠  ⁠Currencycontroller - LWC + Scheduler interface.
+•⁠  ⁠⁠ CurrencyScheduler ⁠ - Daily automatic synchronization.
+•⁠  ⁠`CurrencyControllerTest- Mock callouts Test coverage.
+
+Lightning Web Component
+•⁠  ⁠⁠ currencyManager ⁠
+  - Sync button
+  - Currency datatable
+  - Auto refresh by refreshApex
+
+---
+
+Security
+•⁠  ⁠Named Credentials
+•⁠  ⁠No API keys in Apex or LWC
+•⁠  ⁠External ID based UPSERT
+
+---
+
