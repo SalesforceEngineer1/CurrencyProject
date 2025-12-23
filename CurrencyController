@@ -1,0 +1,40 @@
+public with sharing class CurrencyController {
+
+    // Called from LWC
+    @AuraEnabled
+    public static String syncCurrencies() {
+        syncCurrenciesInternal();
+        return 'Currency sync completed successfully';
+    }
+    
+    
+
+    // Called from Scheduler
+    public static void syncCurrenciesInternal() {
+        List<Currency__c> currencies =
+            CurrencyApiService.fetchCurrencies();
+
+        if (!currencies.isEmpty()) {
+            upsert currencies Currency_Code__c;
+        }
+    }
+    
+//METHOD 3: Fetch currencies for LWC Datatable
+       
+    @AuraEnabled(cacheable=true)
+    public static List<Currency__c> getCurrencies() {
+ 
+        return [
+            SELECT Id,
+                   Name,
+                   Currency_Code__c,
+                   Symbol__c,
+                   Native_Symbol__c,
+                   Decimal_Digits__c,
+                   Rounding__c,
+                   Plural_Name__c
+            FROM Currency__c
+            ORDER BY Name
+                ];
+    }
+}
