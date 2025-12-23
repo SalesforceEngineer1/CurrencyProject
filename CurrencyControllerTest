@@ -1,0 +1,17 @@
+@IsTest
+public class CurrencyControllerTest {
+
+    @IsTest
+    static void testCurrencySync() {
+
+        Test.setMock(HttpCalloutMock.class,
+            new CurrencyMockResponse());
+
+        Test.startTest();
+        String result = CurrencyController.syncCurrencies();
+        Test.stopTest();
+
+        System.assert(result.contains('Currency sync completed'));
+        System.assert([SELECT COUNT() FROM Currency__c] > 0);
+    }
+}
