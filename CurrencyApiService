@@ -1,0 +1,39 @@
+public with sharing class CurrencyApiService {
+
+    public static List<Currency__c> fetchCurrencies() {
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint('callout:FreeCurrencyAPI/v1/currencies');
+        
+        req.setMethod('GET');
+
+        Http http = new Http();
+        HttpResponse res = http.send(req);
+
+        if (res.getStatusCode() != 200) {
+            throw new CalloutException('Currency API failed');
+        }
+
+        Map<String, Object> response =
+            (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+
+        Map<String, Object> data =
+            (Map<String, Object>) response.get('data');
+
+        List<Currency__c> currencies = new List<Currency__c>();
+
+        for (String code : data.keySet()) {
+            Map<String, Object> c = (Map<String, Object>) data.get(code);
+
+            currencies.add(new Currency__c(
+                Currency_Code__c = (String) c.get('code'),
+                Name = (String) c.get('name'),
+                Symbol__c = (String) c.get('symbol'),
+                Native_Symbol__c = (String) c.get('symbol_native'),
+                Decimal_Digits__c = (Integer) c.get('decimal_digits'),
+                Rounding__c = (Decimal) c.get('rounding'),
+                Plural_Name__c = (String) c.get('name_plural')
+            ));
+        }
+        return currencies;
+    }
+}
