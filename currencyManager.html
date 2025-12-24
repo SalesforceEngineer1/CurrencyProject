@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Currency Manager">
+
+        <div class="slds-p-around_medium">
+
+            <lightning-button
+                label="Sync Currencies"
+                variant="brand"
+                onclick={handleSync}>
+            </lightning-button>
+
+            <template if:true={message}>
+                <p class="slds-m-top_small">{message}</p>
+            </template>
+
+            <template if:true={currencies}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={currencies}
+                    columns={columns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+
+        </div>
+
+    </lightning-card>
+</template>
